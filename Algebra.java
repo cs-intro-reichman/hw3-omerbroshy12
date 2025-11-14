@@ -6,10 +6,10 @@
 public class Algebra {
 	public static void main(String args[]) {
 	    // Tests some of the operations
-	    System.out.println(plus(2,3));   // 2 + 3
-	    System.out.println(minus(7,2));  // 7 - 2
+	    System.out.println(plus(-1,3));   // 2 + 3
+	    System.out.println(minus(-1,2));  // 7 - 2
    		System.out.println(minus(2,7));  // 2 - 7
- 		System.out.println(times(3,4));  // 3 * 4
+ 		System.out.println(times(-3,4));  // 3 * 4
    		System.out.println(plus(2,times(4,2)));  // 2 + 4 * 2
    		System.out.println(pow(5,3));      // 5^3
    		System.out.println(pow(3,5));      // 3^5
@@ -26,38 +26,112 @@ public class Algebra {
 	// Returns x1 + x2
 	public static int plus(int x1, int x2) 
 	{
-		int sum = x1;
-		for (int i = 0; i < x2; i++)
+		int sum = 0;
+		if (x1 < 0 && x2 < 0)
 		{
-			sum++;
+			sum = x1;
+		    for (int i = 0; i > x2; i--)
+		    {
+			    sum--;
+		    }
 		}
+        else if (x1<=x2)
+		{
+		    sum = x1;
+		    for (int i = 0; i < x2; i++)
+		    {
+			    sum++;
+		    }
+	    }
+		else 
+		{
+		    sum = x2;
+		    for (int i = 0; i < x1; i++)
+		    {
+			    sum++;
+		    }
+	    }
 		return sum;
 	}
 
 	// Returns x1 - x2
 	public static int minus(int x1, int x2)
     {
-		int dif = x1;
-		for (int i = 0; i < x2; i++)
+		if (x2 == 0)
 		{
-			dif--;
+			return x1;
 		}
+		int dif = x1;
+		if (x1 == 0 && x2 < 0)
+		{
+			for (int i = 0; i > x2; i--)
+		    {
+		        dif++;
+		    }
+		}
+		if (x1 != 0 && x2 < 0)
+		{
+			for (int i = 0; i > x2; i--)
+		    {
+		        dif++;
+		    }
+	    }
+		if (x2 > 0)
+		{
+		    for (int i = 0; i < x2; i++)
+		    {
+		        dif--;
+	        }
+		}
+			
 		return dif;
 	}
 
 	// Returns x1 * x2
 	public static int times(int x1, int x2) 
 	{
-		int result = 0, a = 0;
-		for (int i = 0; i < x2; i++)
-		{
-			result = plus(x1,a);
-			for (int j = 0; j < x1; j++)
-			{		
-				a++;
-			}
-		}
-		return result;
+		if (x1 == 0 || x2 == 0)
+	    {
+			return 0;
+	    }
+
+		int multiplier; // מספר האיטרציות
+        int valueToSum; // הערך שנוסף בכל איטרציה
+
+        // נשווה את הערכים המוחלטים ללא Math.abs
+        if (x1 > 0 ? x1 < (x2 > 0 ? x2 : -x2) : -x1 < (x2 > 0 ? x2 : -x2)) {
+            // אם |x1| < |x2|
+            multiplier = x1;
+            valueToSum = x2;
+        } else {
+            // אם |x2| <= |x1|
+            multiplier = x2;
+            valueToSum = x1;
+        }
+        
+        // 3. ביצוע הכפל באמצעות חיבור/חיסור חוזרים
+        int product = 0;
+        
+        // הלולאה תרוץ כמספר הפעמים שהוא הערך המוחלט של multiplier
+        // נשתמש במונה חיובי (i)
+        for (int i = 0; i < (multiplier < 0 ? -multiplier : multiplier); i++) {
+            
+            // אם המכפיל (multiplier) הוא שלילי, אנו מבצעים חיסור חוזר (חיבור ערך שלילי).
+            if (multiplier < 0) {
+                // לדוגמה: 3 * (-4) = (-4) + (-4) + (-4)
+                product = plus(product, valueToSum);
+            } else {
+                 // אם המכפיל (multiplier) הוא חיובי, אנו מבצעים חיבור חוזר.
+                // לדוגמה: 3 * 4 = 4 + 4 + 4
+                product = plus(product, valueToSum);
+            }
+        }
+        
+        // 4. החזרת התוצאה
+        // מכיוון ששמרנו על הסימנים המקוריים של valueToSum וביצענו את החיבור/חיסור
+        // בהתאם למספר האיטרציות הנדרש, התוצאה כבר מחשבת את הסימן הנכון.
+        return product;
+
 	}
 
 	// Returns x^n (for n >= 0)
