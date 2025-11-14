@@ -24,44 +24,123 @@ public class Algebra {
 	}  
 
 	// Returns x1 + x2
-	public static int plus(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
+	public static int plus(int x1, int x2) 
+	{
+		int sum = x1;
+		for (int i = 0; i < x2; i++)
+		{
+			sum++;
+		}
+		return sum;
 	}
 
 	// Returns x1 - x2
-	public static int minus(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
+	public static int minus(int x1, int x2)
+    {
+		int dif = x1;
+		for (int i = 0; i < x2; i++)
+		{
+			dif--;
+		}
+		return dif;
 	}
 
 	// Returns x1 * x2
-	public static int times(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
+	public static int times(int x1, int x2) 
+	{
+		int result = 0, a = 0;
+		for (int i = 0; i < x2; i++)
+		{
+			result = plus(x1,a);
+			for (int j = 0; j < x1; j++)
+			{		
+				a++;
+			}
+		}
+		return result;
 	}
 
 	// Returns x^n (for n >= 0)
-	public static int pow(int x, int n) {
-		// Replace the following statement with your code
-		return 0;
+	public static int pow(int x, int n) 
+	{
+		int result = 1;
+		for (int i = 0; i < n; i++)
+		{
+			result = times(result, x);
+		}
+		return result;
 	}
 
 	// Returns the integer part of x1 / x2 
-	public static int div(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
+	public static int div(int x1, int x2) 
+	{
+		if (x2 == 0) {
+            System.out.println("Division by zero is not allowed.");
+            return 0; 
+        }
+        int a = x1;
+        int b = x2;
+        int result = 0;
+
+        while (a >= b) 
+		{
+            a = minus(a, b); 
+            result = plus(result, 1);      
+        }
+
+        return result;
 	}
 
 	// Returns x1 % x2
-	public static int mod(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}	
+	public static int mod(int x1, int x2) 
+	{
+		if (x2 == 0) 
+		{
+            System.out.println("Modulo by zero is not allowed.");
+            return 0; 
+        }
+        int a = x2;
+        int r = x1; 
+        
+        while (r >= a) 
+		{
+            r = minus(r, a);
+        }
+        if (x1 < 0) 
+		{	
+            return minus(0, r);  
+        }
+        return r;
+    }	
 
 	// Returns the integer part of sqrt(x) 
-	public static int sqrt(int x) {
-		// Replace the following statement with your code
-		return 0;
+	public static int sqrt(int x) 
+	{
+		if (x < 0) {
+            System.out.println("Cannot calculate the square root of a negative number.");
+            return 0; 
+        }
+        if (x == 0 || x == 1) 
+		{
+            return x;
+        }
+		int low = 1;
+        int high = x; 
+        int result = 1; 
+
+        while (low <= high)
+		{
+            int mid = low + div(minus(high, low), 2); 
+            if (mid <= div(x, mid)) 
+		    { 
+               result = mid;
+               low = mid + 1;
+            } 
+			else 
+			{
+                high = mid - 1;
+            }
+        }
+        return result;
 	}	  	  
 }
