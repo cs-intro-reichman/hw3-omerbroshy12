@@ -6,10 +6,10 @@
 public class Algebra {
 	public static void main(String args[]) {
 	    // Tests some of the operations
-	    System.out.println(plus(-1,3));   // 2 + 3
-	    System.out.println(minus(-1,2));  // 7 - 2
+	    System.out.println(plus(2,3));   // 2 + 3
+	    System.out.println(minus(7,2));  // 7 - 2
    		System.out.println(minus(2,7));  // 2 - 7
- 		System.out.println(times(-3,4));  // 3 * 4
+ 		System.out.println(times(3,4));  // 3 * 4
    		System.out.println(plus(2,times(4,2)));  // 2 + 4 * 2
    		System.out.println(pow(5,3));      // 5^3
    		System.out.println(pow(3,5));      // 3^5
@@ -95,43 +95,39 @@ public class Algebra {
 			return 0;
 	    }
 
-		int multiplier; // מספר האיטרציות
-        int valueToSum; // הערך שנוסף בכל איטרציה
+		int result = 0;
 
-        // נשווה את הערכים המוחלטים ללא Math.abs
-        if (x1 > 0 ? x1 < (x2 > 0 ? x2 : -x2) : -x1 < (x2 > 0 ? x2 : -x2)) {
-            // אם |x1| < |x2|
-            multiplier = x1;
-            valueToSum = x2;
-        } else {
-            // אם |x2| <= |x1|
-            multiplier = x2;
-            valueToSum = x1;
-        }
-        
-        // 3. ביצוע הכפל באמצעות חיבור/חיסור חוזרים
-        int product = 0;
-        
-        // הלולאה תרוץ כמספר הפעמים שהוא הערך המוחלט של multiplier
-        // נשתמש במונה חיובי (i)
-        for (int i = 0; i < (multiplier < 0 ? -multiplier : multiplier); i++) {
-            
-            // אם המכפיל (multiplier) הוא שלילי, אנו מבצעים חיסור חוזר (חיבור ערך שלילי).
-            if (multiplier < 0) {
-                // לדוגמה: 3 * (-4) = (-4) + (-4) + (-4)
-                product = plus(product, valueToSum);
-            } else {
-                 // אם המכפיל (multiplier) הוא חיובי, אנו מבצעים חיבור חוזר.
-                // לדוגמה: 3 * 4 = 4 + 4 + 4
-                product = plus(product, valueToSum);
+		if (x1 < 0 && x2 < 0)
+		{
+			x1 = minus(0, x1);
+			x2 = minus(0, x2);
+		}
+		if ((x1 < 0 && x2 > 0) || (x1 > 0 && x2 < 0))
+		{
+			if (x1 < 0)
+			{
+				for (int i = 0; i < x2; i++)
+				{
+					result = plus(result, x1);
+				}
+			}
+			else
+			{
+				for (int i = 0; i > x2; i--)
+				{
+					result = minus(result, x1);
+				}
+			}
+		}
+		if (x1 > 0 && x2 > 0)
+		{
+			for (int i = 0; i < x2; i++)
+	        {
+                result = plus(result, x1);
             }
-        }
-        
-        // 4. החזרת התוצאה
-        // מכיוון ששמרנו על הסימנים המקוריים של valueToSum וביצענו את החיבור/חיסור
-        // בהתאם למספר האיטרציות הנדרש, התוצאה כבר מחשבת את הסימן הנכון.
-        return product;
-
+		}
+	    
+		return result;
 	}
 
 	// Returns x^n (for n >= 0)
@@ -152,17 +148,44 @@ public class Algebra {
             System.out.println("Division by zero is not allowed.");
             return 0; 
         }
-        int a = x1;
-        int b = x2;
+        
         int result = 0;
+		int a, b;
 
-        while (a >= b) 
+		if (x1 < 0 && x2 < 0)
 		{
-            a = minus(a, b); 
-            result = plus(result, 1);      
-        }
-
-        return result;
+			x1 = minus(0, x1);
+			x2 = minus(0, x2);
+		}
+        
+		if ((x1 < 0 && x2 > 0) || (x1 > 0 && x2 < 0))
+		{
+			a = x1;
+			b = x2;
+			if (x1 < 0)
+			{
+				a = minus(0, x1);
+			}
+			else
+			{
+				b = minus(0, x2);
+			}
+			while (a>=b)
+			{
+				a = minus(a, b);
+				result++;
+			}
+			result = minus(0, result);
+		}
+		if (x1 > 0 && x2 > 0)
+		{
+			while (x1>=x2)
+			{
+				x1 = minus(x1, x2);
+				result++;
+			}
+		}
+		return result;    
 	}
 
 	// Returns x1 % x2
