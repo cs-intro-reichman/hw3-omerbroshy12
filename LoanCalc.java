@@ -30,19 +30,16 @@ public class LoanCalc {
 	private static double endBalance(double loan, double rate, int n, double payment) 
 	{	
 		double balance = loan;
-        // המרת הריבית מאחוז לעשרוני (לדוגמה: 5.0 -> 0.05)
-        double rateDecimal = rate / 100.0;
+    
+    // FIX: Divide the Annual Rate by 12 to get the Periodical Rate (monthly)
+        double rateDecimal = (rate / 100.0) / 12.0; 
         double multiplier = 1.0 + rateDecimal;
-        
-        for (int i = 0; i < n; i++) {
-            // הוספת ריבית על היתרה הקיימת
+    
+        for (int i = 0; i < n; i++) 
+		{
             balance = balance * multiplier;
-            
-            // הפחתת התשלום
             balance = balance - payment;
         }
-        
-        // עיגול התוצאה לדיוק של סכום כסף (אגורות)
         return Math.round(balance * 100.0) / 100.0;
 	}
 	
