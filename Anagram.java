@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /** Functions for checking if a given string is an anagram. */
 public class Anagram {
 	public static void main(String args[]) {
@@ -29,32 +31,28 @@ public class Anagram {
 	// Returns true if the two given strings are anagrams, false otherwise.
 	public static boolean isAnagram(String str1, String str2) 
 	{
-		String word1 = preProcess(str1);
-		String word2 = preProcess(str2);
-		String result = "", part1 = "", part2 = "";
-		boolean isLetter = false;
-		for (int i = 0; i < word1.length(); i++)
+		String temp1 = preProcess(str1);
+        String temp2 = preProcess(str2);
+
+        if (temp1.length() != temp2.length()) 
 		{
-			for (int j = 0; j < word2.length(); j++)
+            return false;
+        }
+        for (int i = 0; i < temp1.length(); i++)
+		{
+            char letter = temp1.charAt(i);
+            int matchIndex = temp2.indexOf(letter);
+            
+            if (matchIndex == -1) 
 			{
-				if (word1.charAt(i)==word2.charAt(j))
-				{
-					result += word1.charAt(i);
-					part1 = word1.substring(0, word1.charAt(i));
-					part2 = word1.substring(word1.charAt(i) + 1);
-					word1 = part1 + part2;
-					part1 = word2.substring(0, word2.charAt(j));
-					part2 = word2.substring(word2.charAt(j) + 1);
-					word2 = part1 + part2;
-					
-				}
-			}
-		}
-		if (str1 == result)
-		{
-			isLetter = true;
-		}
-		return isLetter;
+                return false;
+            }
+                     
+            String part1 = temp2.substring(0, matchIndex);
+            String part2 = temp2.substring(matchIndex + 1);
+            temp2 = part1 + part2;
+        }
+        return temp2.length() == 0;
 	}
 	   
 	// Returns a preprocessed version of the given string: all the letter characters are converted
@@ -77,8 +75,22 @@ public class Anagram {
 	   
 	// Returns a random anagram of the given string. The random anagram consists of the same
 	// characters as the given string, re-arranged in a random order. 
-	public static String randomAnagram(String str) {
-		// Replace the following statement with your code
-		return "";
+	public static String randomAnagram(String str)
+    {
+		String result = "";
+        String temp = str;
+        
+        while (temp.length() > 0)
+	    {
+            int currentLength = temp.length();
+            int rndI = (int) (Math.random() * currentLength);
+            char rndLetter = temp.charAt(rndI);
+            result += rndLetter;  
+            String part1 = temp.substring(0, rndI);  
+            String part2 = temp.substring(rndI + 1); 
+            temp = part1 + part2;
+        }
+        
+        return result;
 	}
 }
