@@ -31,11 +31,11 @@ public class LoanCalc {
 	{	
 		double balance = loan;
         double rateDecimal = rate / 100.0; 
-        double multiplier = 1.0 + rateDecimal;
+        double mult = 1.0 + rateDecimal;
     
         for (int i = 0; i < n; i++) {
-            balance = balance - payment; 
-            balance = balance * multiplier;     
+            balance -= payment; 
+            balance *= mult;     
         }
     
         return Math.round(balance * 100.0) / 100.0;
@@ -70,24 +70,24 @@ public class LoanCalc {
 	{  
         iterationCounter = 0;
         
-        double lo = loan / n;
+        double l = loan / n;
         double rateDecimal = rate / 100.0;
-        double hi = loan;
+        double h = loan;
         
-        double g = (lo + hi) / 2.0; 
+        double g = (l + h) / 2.0; 
         
-        while ((hi - lo) >= epsilon)
+        while ((h - l) >= epsilon)
             {
             
-            double f_g = endBalance(loan, rate, n, g);
+            double fg = endBalance(loan, rate, n, g);
             
-            if (f_g > 0) { 
-                lo = g;
+            if (fg > 0) { 
+                l = g;
             } else { 
-                hi = g;
+                h = g;
             }
             iterationCounter++;
-            g = (lo + hi) / 2.0; 
+            g = (l + h) / 2.0; 
         }
         
         return g;
