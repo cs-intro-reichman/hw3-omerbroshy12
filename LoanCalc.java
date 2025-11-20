@@ -34,8 +34,8 @@ public class LoanCalc {
         double multiplier = 1.0 + rateDecimal;
     
         for (int i = 0; i < n; i++) {
-            balance = balance * multiplier;
-            balance = balance - payment;      
+            balance = balance - payment; 
+            balance = balance * multiplier;     
         }
     
         return Math.round(balance * 100.0) / 100.0;
