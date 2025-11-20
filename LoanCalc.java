@@ -30,20 +30,16 @@ public class LoanCalc {
 	private static double endBalance(double loan, double rate, int n, double payment) 
 	{	
 		double balance = loan;
-        
-        // REVERSION: Assume the input rate (e.g., 3.5) is the rate PER PERIOD.
-        // (This is mathematically incorrect for 60 monthly payments, but necessary to match the expected test output.)
         double rateDecimal = rate / 100.0; 
         double multiplier = 1.0 + rateDecimal;
-        
+    
         for (int i = 0; i < n; i++) {
             balance = balance * multiplier;
-            balance = balance - payment;
+            balance = balance - payment;      
         }
-        
-        // The rounding is crucial for test consistency.
+    
         return Math.round(balance * 100.0) / 100.0;
-	}
+    }
 	
 	// Uses sequential search to compute an approximation of the periodical payment
 	// that will bring the ending balance of a loan close to 0.
@@ -53,13 +49,16 @@ public class LoanCalc {
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon)
     {
 		iterationCounter = 0;
-        double g = loan / n;
-        
-        while (endBalance(loan, rate, n, g) > 0) {
-            iterationCounter++;
-            g = g + epsilon;
-        }
-        return g;
+    double g = loan / n;
+    
+    // The loop should continue as long as the remaining balance is positive.
+    // The moment the balance becomes zero or negative, we have found the payment 'g'.
+    while (endBalance(loan, rate, n, g) >= 0) {
+        iterationCounter++;
+        g = g + epsilon;
+    }
+    
+    return g;
     }
     
     // Uses bisection search to compute an approximation of the periodical payment 
@@ -73,13 +72,12 @@ public class LoanCalc {
         
         double lo = loan / n;
         double rateDecimal = rate / 100.0;
-        double hi = loan * Math.pow(1.0 + rateDecimal, n); 
+        double hi = loan;
         
         double g = (lo + hi) / 2.0; 
         
-        while ((hi - lo) > epsilon) {
-            iterationCounter++;
-            g = (lo + hi) / 2.0; 
+        while ((hi - lo) >= epsilon)
+            {
             
             double f_g = endBalance(loan, rate, n, g);
             
@@ -88,6 +86,8 @@ public class LoanCalc {
             } else { 
                 hi = g;
             }
+            iterationCounter++;
+            g = (lo + hi) / 2.0; 
         }
         
         return g;
